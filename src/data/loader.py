@@ -294,7 +294,7 @@ def check_data_params(params):
         for p in paths.values():
             if not os.path.isfile(p):
                 logger.error(f"{p} not found")
-    assert all([all([os.path.isfile(p) for p in paths.values()]) for paths in params.mono_dataset.values()])
+    #assert all([all([os.path.isfile(p) for p in paths.values()]) for paths in params.mono_dataset.values()])
 
     # check parallel datasets
     required_para_train = set(params.clm_steps + params.mlm_steps + params.pc_steps + params.mt_steps)
