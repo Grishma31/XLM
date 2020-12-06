@@ -13,7 +13,7 @@ $FASTBPE learnbpe 3000 $OUTPATH/bpe.train > $OUTPATH/codes
 pair=en-hi
 for lg in $(echo $pair | sed -e 's/\-/ /g'); do
   for split in train valid test; do
-    $FASTBPE applybpe $OUTPATH/$pair.$lg.$split data/para/$pair.$lg.$split
+    $FASTBPE applybpe $OUTPATH/$pair.$lg.$split data/para/$pair.$lg.$split $OUTPATH/codes
     cat $OUTPATH/$pair.$lg.$split | $FASTBPE getvocab - > $OUTPATH/vocab.pair.$lg.$split &
     python preprocess.py $OUTPATH/vocab.pair.$lg.$split $OUTPATH/$pair.$lg.$split &
   done
