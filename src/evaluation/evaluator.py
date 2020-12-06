@@ -542,6 +542,8 @@ def convert_to_text(batch, lengths, dico, params):
         for k in range(1, lengths[j]):
             if batch[k, j] == params.eos_index:
                 break
+            if batch[k, j] >= len(dico):
+                break
             words.append(dico[batch[k, j]])
         sentences.append(" ".join(words))
     return sentences

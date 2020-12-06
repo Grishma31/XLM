@@ -96,12 +96,12 @@ if [ $pair == "en-fr" ]; then
 fi
 
 # en-hi
-if [ $pair == "en-hi" ]; then
-  echo "Download parallel data for English-Hindi"
+#if [ $pair == "en-hi" ]; then
+ # echo "Download parallel data for English-Hindi"
   # IIT Bombay English-Hindi Parallel Corpus
-  wget -c http://www.cfilt.iitb.ac.in/iitb_parallel/iitb_corpus_download/parallel.tgz -P $PARA_PATH
-  tar -xvf $PARA_PATH/parallel.tgz -d $PARA_PATH
-fi
+ # wget -c http://www.cfilt.iitb.ac.in/iitb_parallel/iitb_corpus_download/parallel.tgz -P $PARA_PATH
+ # tar -xvzf $PARA_PATH/parallel.tgz --directory $PARA_PATH
+#fi
 
 # en-ru
 if [ $pair == "en-ru" ]; then
@@ -182,11 +182,13 @@ fi
 #
 
 # tokenize
+DATAPATH=$PARA_PATH/parallel
 for lg in $(echo $pair | sed -e 's/\-/ /g'); do
   if [ ! -f $PARA_PATH/$pair.$lg.all ]; then
-    cat $PARA_PATH/*.$pair.$lg | $TOKENIZE $lg | python $LOWER_REMOVE_ACCENT > $PARA_PATH/$pair.$lg.all
+    cat $DATAPATH/*.$pair.$lg | $TOKENIZE $lg | python $LOWER_REMOVE_ACCENT > $PARA_PATH/$pair.$lg.all
   fi
 done
+
 
 # split into train / valid / test
 split_data() {
@@ -201,6 +203,6 @@ split_data() {
     shuf --random-source=<(get_seeded_random 42) $1 | tail -5000                > $4;
 }
 for lg in $(echo $pair | sed -e 's/\-/ /g'); do
-  split_data $PARA_PATH/$pair.$lg.all $PARA_PATH/$pair.$lg.train $PARA_PATH/$pair.$lg.valid $PARA_PATH/$pair.$lg.test
+    split_data $PARA_PATH/$pair.$lg.all $PARA_PATH/$pair.$lg.train $PARA_PATH/$pair.$lg.valid $PARA_PATH/$pair.$lg.test
 done
 

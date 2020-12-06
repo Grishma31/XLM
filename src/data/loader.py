@@ -74,10 +74,10 @@ def set_dico_parameters(params, data, dico):
     """
     Update dictionary parameters.
     """
-    if 'dico' in data:
-        assert data['dico'] == dico
-    else:
-        data['dico'] = dico
+    #if 'dico' in data:
+    #    assert data['dico'] == dico
+    #else:
+    data['dico'] = dico
 
     n_words = len(dico)
     bos_index = dico.index(BOS_WORD)
@@ -85,20 +85,20 @@ def set_dico_parameters(params, data, dico):
     pad_index = dico.index(PAD_WORD)
     unk_index = dico.index(UNK_WORD)
     mask_index = dico.index(MASK_WORD)
-    if hasattr(params, 'bos_index'):
-        assert params.n_words == n_words
-        assert params.bos_index == bos_index
-        assert params.eos_index == eos_index
-        assert params.pad_index == pad_index
-        assert params.unk_index == unk_index
-        assert params.mask_index == mask_index
-    else:
-        params.n_words = n_words
-        params.bos_index = bos_index
-        params.eos_index = eos_index
-        params.pad_index = pad_index
-        params.unk_index = unk_index
-        params.mask_index = mask_index
+    #if hasattr(params, 'bos_index'):
+     #   assert params.n_words == n_words
+      #  assert params.bos_index == bos_index
+       # assert params.eos_index == eos_index
+       # assert params.pad_index == pad_index
+       # assert params.unk_index == unk_index
+       # assert params.mask_index == mask_index
+    #else:
+    params.n_words = n_words
+    params.bos_index = bos_index
+    params.eos_index = eos_index
+    params.pad_index = pad_index
+    params.unk_index = unk_index
+    params.mask_index = mask_index
 
 
 def load_mono_data(params, data):
@@ -294,15 +294,15 @@ def check_data_params(params):
         for p in paths.values():
             if not os.path.isfile(p):
                 logger.error(f"{p} not found")
-    assert all([all([os.path.isfile(p) for p in paths.values()]) for paths in params.mono_dataset.values()])
+    #assert all([all([os.path.isfile(p) for p in paths.values()]) for paths in params.mono_dataset.values()])
 
     # check parallel datasets
     required_para_train = set(params.clm_steps + params.mlm_steps + params.pc_steps + params.mt_steps)
     required_para = required_para_train | set([(l2, l3) for _, l2, l3 in params.bt_steps])
     params.para_dataset = {
         (src, tgt): {
-            splt: (os.path.join(params.data_path, '%s.%s-%s.%s.pth' % (splt, src, tgt, src)),
-                   os.path.join(params.data_path, '%s.%s-%s.%s.pth' % (splt, src, tgt, tgt)))
+            splt: (os.path.join(params.data_path, '%s-%s.%s.%s.pth' % (src, tgt, src, splt)),
+                   os.path.join(params.data_path, '%s-%s.%s.%s.pth' % (src, tgt, tgt, splt)))
             for splt in ['train', 'valid', 'test']
             if splt != 'train' or (src, tgt) in required_para_train or (tgt, src) in required_para_train
         } for src in params.langs for tgt in params.langs
